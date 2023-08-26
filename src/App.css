@@ -1,3 +1,5 @@
+/** @format */
+
 .App {
   text-align: center;
 }
@@ -35,4 +37,62 @@
   to {
     transform: rotate(360deg);
   }
+}
+.navbarColor {
+  background-color: #0f1111;
+}
+.carousalImg {
+  height: 400px !important;
+}
+.navOptions {
+  color: white;
+  background-color: #0f1111;
+  border: none;
+  cursor: pointer;
+}
+.navOptions:hover {
+  border: 1px white solid;
+  padding: 10px;
+}
+.searchbar {
+  height: 38px;
+  font-family: inherit;
+  font-size: 15px;
+  color: #111;
+  text-indent: 8px;
+  width: 40vw;
+}
+.searchIcon {
+  background-color: goldenrod;
+  height: 38px;
+  color: white;
+  padding-left: 5px;
+  padding-right: 5px;
+  cursor: pointer;
+  border-top-right-radius:5px ;
+  border-bottom-right-radius: 5px;
+}
+.shopcartTitle {
+  font-family: cursive;
+  color: goldenrod;
+}
+.btns {
+  border-radius: 5px;
+  padding: 10px;
+  width: 200px;
+  color: black;
+  background-color: goldenrod;
+  border: none;
+  margin: 5px;
+}
+button {
+  cursor: pointer;
+}
+.cartBtn {
+  background-color: red;
+  border-radius: 5px;
+  padding: 10px;
+  width: 200px;
+  color: white;
+  border: none;
 }
