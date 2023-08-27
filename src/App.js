@@ -6,6 +6,7 @@ import Register from "./register";
 import Login from "./login";
 import Products from "./products";
 import AddCart from "./cart";
+import Email from "./email";
 function App() {
   return (
     <BrowserRouter>
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/products" element={<Products />}></Route>
         <Route path="/cart" element={<AddCart />}></Route>
+        <Route path="/order" element={<Email />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -23,6 +23,8 @@ const Register = () => {
   const onSubmitFormData = async () => {
     try {
       const res = await registerRoute(formData);
+      console.log("e", res);
+
       if (res?.data?.message) {
         setMessage("Registered Successfully");
       }
@@ -56,7 +58,9 @@ const Register = () => {
           onChange={onChangeFormData}
         />
         <br />
-        <button onClick={onSubmitFormData}>Register</button>
+        <button onClick={onSubmitFormData} className="authBtns mt-4 mx-5 mb-3">
+          Register
+        </button>
       </form>
     </div>
   );

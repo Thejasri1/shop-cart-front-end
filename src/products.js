@@ -7,6 +7,7 @@ import "./App.css";
 import { BiSearch } from "react-icons/bi";
 import Star from "./Star";
 import AddCart from "./cart";
+import Email from "./email";
 
 const Products = () => {
   const location = useLocation();
@@ -73,6 +74,20 @@ const Products = () => {
       console.log(e);
     }
   };
+  const onDispalyOrderForm = (product) => {
+    try {
+      navigate("/order", { state: [token, product] });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onNaviagteToLogin = () => {
+    try {
+      navigate("/", { state: null });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbarColor">
@@ -83,7 +98,9 @@ const Products = () => {
               height={40}
               width={40}
             />
-            <h4 className="shopcartTitle">Shop cart</h4>
+            <h4 className="shopcartTitle" onClick={onNaviagteToLogin}>
+              Shop cart
+            </h4>
           </div>
           <div className="navbar-nav" style={{ display: "fkex" }}>
             <input
@@ -205,13 +222,13 @@ const Products = () => {
         </button>
       </div>
       {viewMode === "home" ? (
-        <div>
+        <div className="container-fluid cardsSection">
           {productsList?.map((product) => {
             return (
-              <div>
+              <div className="row">
                 {
                   <div
-                    className="card"
+                    className="card productCardContainer"
                     style={{ width: "18rem" }}
                     key={product._id}
                   >
@@ -220,16 +237,26 @@ const Products = () => {
                       className="card-img-top"
                       alt={product.productname}
                     />
-                    <div className="card-body">
+                    <div className="cardBody">
                       <h5 className="card-title">{product?.productname}</h5>
-                      <p className="card-text">{product?.productdescription}</p>
-                      <p className="card-text">{product?.productsoldcount}</p>
-                      <p className="card-text">{product?.productcolor}</p>
-                      <p className="card-text">{product?.producttype}</p>
-                      <p className="card-text">{product?.productdiscount}</p>
-                      <p className="card-text">{product?.productrating}</p>
+                      <p style={{ lineHeight: "15px" }}>
+                        {product?.productdescription}
+                      </p>
                       <Star star={product?.productrating} />
-                      <p className="card-text">{product?.productprice}</p>
+                      <h5>
+                        <sub>
+                          <i>price :{product?.productprice}$</i>
+                        </sub>
+                        <sup>
+                          <i>{product?.productdiscount}</i>
+                        </sup>
+                      </h5>
+                      <p>{product?.productcolor}</p>
+                      <p>Product :{product?.producttype}</p>
+                      <p style={{ paddingTop: "10px" }}>
+                        <spam style={{ color: "blue" }}>Sold :</spam>
+                        <i>{product?.productsoldcount}</i>
+                      </p>
                       <div style={{ display: "flex" }}>
                         <button
                           onClick={() => onDisplayAddCart(product)}
@@ -237,7 +264,13 @@ const Products = () => {
                         >
                           Add to cart
                         </button>
-                        <button className="btns">Order Now</button>
+                        <button
+                          className="btns"
+                          style={{ backgroundColor: "green", color: "white" }}
+                          onClick={() => onDispalyOrderForm(product)}
+                        >
+                          Order Now
+                        </button>
                       </div>
                     </div>
                   </div>

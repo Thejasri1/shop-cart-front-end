@@ -13,27 +13,39 @@ const Account = () => {
     }
   };
   return (
-    <div>
-      {selectedAccType === "login" ? (
-        <div>
-          <Login />
-          <p>or</p>
-          <p
-            onClick={() => displayAccType("register")}
-            style={{ color: "blue" }}
-          >
-            Create account
-          </p>
-        </div>
-      ) : (
-        <div>
-          <Register />
-          <p>or</p>
-          <p style={{ color: "blue" }} onClick={() => displayAccType("login")}>
-            Already have a account login
-          </p>
-        </div>
-      )}
+    <div className="mainContainer">
+      <div className="loginContainer">
+        {selectedAccType === "login" ? (
+          <div>
+            <Login />
+            <b
+              onClick={() => displayAccType("register")}
+              style={{
+                color: "red",
+                paddingRight: "100px",
+              }}
+            >
+              <i>Forgot password</i>
+            </b>
+            <b
+              onClick={() => displayAccType("register")}
+              style={{ color: "red" }}
+            >
+              <i>Create account</i>
+            </b>
+          </div>
+        ) : (
+          <div>
+            <Register />
+            <b
+              style={{ color: "red", paddingLeft: "50px" }}
+              onClick={() => displayAccType("login")}
+            >
+              <i>Already have a account login</i>
+            </b>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -3,6 +3,7 @@
 import { loginRoute } from "./API/userRoutes";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import "./account.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const Login = () => {
       } else {
         navigate("/", { state: null });
       }
+      setMessage("");
     } catch (e) {
       setMessage(e?.response?.data?.message);
     }
@@ -38,14 +40,28 @@ const Login = () => {
   };
   return (
     <div>
+      <p style={{ color: "red" }}>{message}</p>
       <form onSubmit={onFormSubmit}>
         <label>Enter Email :</label> <br />
-        <input type="text" name="email" onChange={onChangeFormData} /> <br />
+        <input
+          type="text"
+          name="email"
+          onChange={onChangeFormData}
+          className="input"
+        />
+        <br />
         <label>Enter Password :</label> <br />
-        <input type="password" name="password" onChange={onChangeFormData} />
+        <input
+          type="password"
+          name="password"
+          onChange={onChangeFormData}
+          className="input"
+        />
         <br />
         <br />
-        <button onClick={onSubmitFormData}>Login</button>
+        <button onClick={onSubmitFormData} className="authBtns mt-3 mx-5 mb-3">
+          Login
+        </button>
       </form>
     </div>
   );

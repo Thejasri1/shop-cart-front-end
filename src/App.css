@@ -44,6 +44,9 @@
 .carousalImg {
   height: 400px !important;
 }
+p{
+    font-family: serif;
+}
 .navOptions {
   color: white;
   background-color: #0f1111;
@@ -95,4 +98,37 @@ button {
   width: 200px;
   color: white;
   border: none;
+}
+.cardBody{
+  line-height: 5px;
+}
+.productCardContainer{
+  margin: 20px;
+}
+.cardsSection{
+  display: flex;
+  overflow-x: scroll;
+  width: 100vw;
+}
+
+.loginContainer{
+position: relative;
+top: 20%;
+left: 35%;
+padding: 20px;
+}
+.mainContainer{
+  background-color: navy;
+  color: white;
+  height: 100vh;
+  font-family: serif;
+}
+.authBtns{
+  background-color: gold;
+  color: black;
+  font-weight: 20px;
+  width: 200px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
 }
