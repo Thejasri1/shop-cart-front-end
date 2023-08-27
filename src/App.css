@@ -44,8 +44,8 @@
 .carousalImg {
   height: 400px !important;
 }
-p{
-    font-family: serif;
+p {
+  font-family: serif;
 }
 .navOptions {
   color: white;
@@ -72,7 +72,7 @@ p{
   padding-left: 5px;
   padding-right: 5px;
   cursor: pointer;
-  border-top-right-radius:5px ;
+  border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
 .shopcartTitle {
@@ -99,36 +99,48 @@ button {
   color: white;
   border: none;
 }
-.cardBody{
+.cardBody {
   line-height: 5px;
 }
-.productCardContainer{
+.productCardContainer {
   margin: 20px;
 }
-.cardsSection{
+.cardsSection {
   display: flex;
   overflow-x: scroll;
   width: 100vw;
 }
 
-.loginContainer{
-position: relative;
-top: 20%;
-left: 35%;
-padding: 20px;
+.loginContainer {
+  position: relative;
+  top: 10%;
+  left: 35%;
+  padding: 20px;
 }
-.mainContainer{
-  background-color: navy;
-  color: white;
+.mainContainer {
+  background-color: goldenrod;
+  color: black;
   height: 100vh;
   font-family: serif;
 }
-.authBtns{
-  background-color: gold;
-  color: black;
+.authBtns {
+  background-color:maroon;
+  color: white;
   font-weight: 20px;
   width: 200px;
   padding: 5px;
   border: none;
   border-radius: 5px;
+}
+.forgotPass {
+  color: green;
+  font-family: cursive;
+  font-size: medium;
+}
+.logo{
+  height: 30px;
+  width: 30px;
+  color: goldenrod;
+  margin-left: 20px;
+  margin-right: 10px;
 }

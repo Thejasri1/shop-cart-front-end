@@ -45,16 +45,34 @@ const Register = () => {
       <form onSubmit={onFormSubmit}>
         <label>Enter Username :</label>
         <br />
-        <input type="text" name="username" onChange={onChangeFormData} /> <br />
+        <input
+          type="text"
+          name="username"
+          onChange={onChangeFormData}
+          className="input"
+        />{" "}
+        <br />
         <label>Enter Email :</label> <br />
-        <input type="text" name="email" onChange={onChangeFormData} /> <br />
+        <input
+          type="text"
+          name="email"
+          onChange={onChangeFormData}
+          className="input"
+        />{" "}
+        <br />
         <label>Enter Password :</label> <br />
-        <input type="password" name="password" onChange={onChangeFormData} />
+        <input
+          type="password"
+          name="password"
+          onChange={onChangeFormData}
+          className="input"
+        />
         <br />
         <label>Enter Confirmpassword :</label> <br />
         <input
           type="password"
           name="confirmpassword"
+          className="input"
           onChange={onChangeFormData}
         />
         <br />

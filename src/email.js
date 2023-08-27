@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import "./email.css";
 import "./App.css";
+import { LuShoppingBag } from "react-icons/lu";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Email = () => {
@@ -47,6 +48,14 @@ const Email = () => {
       console.log(e);
     }
   };
+  const onNavigateToAuth = () => {
+    try {
+      navigate("/", { state: null });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div className="emailContainer">
       <nav className="navbarColor">
@@ -58,12 +67,10 @@ const Email = () => {
           }}
         >
           <div style={{ display: "flex" }}>
-            <img
-              src="https://png.pngtree.com/png-vector/20190329/ourlarge/pngtree-vector-shopping-bag-icon-png-image_889429.jpg"
-              height={40}
-              width={40}
-            />
-            <h4 className="shopcartTitle">Shop cart</h4>
+            <LuShoppingBag className="logo" />
+            <h4 className="shopcartTitle" onClick={onNavigateToAuth}>
+              Shop cart
+            </h4>
           </div>
           <div className="flexContainer">
             <p className="navOptions" onClick={() => onDisplayHome("home")}>
@@ -79,17 +86,28 @@ const Email = () => {
         <form ref={form} onSubmit={sendEmail}>
           <label>Enter Name :</label>
           <br />
-          <input type="text" name="user_name" placeholder="Enter your name" />
+          <input
+            type="text"
+            name="user_name"
+            placeholder="Enter your name"
+            className="mb-2"
+          />
           <br />
           <label>Enter Email :</label> <br />
           <input
             type="email"
             name="user_email"
             placeholder="example@gmail.com"
+            className="mb-2"
           />
           <br />
           <label>Enter Address :</label> <br />
-          <textarea name="message" placeholder="Enter address" /> <br />
+          <textarea
+            name="message"
+            placeholder="Enter address"
+            className="mb-2"
+          />
+          <br />
           <textarea
             name="address"
             defaultValue={productDetails}

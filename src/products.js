@@ -7,7 +7,7 @@ import "./App.css";
 import { BiSearch } from "react-icons/bi";
 import Star from "./Star";
 import AddCart from "./cart";
-import Email from "./email";
+import { LuShoppingBag } from "react-icons/lu";
 
 const Products = () => {
   const location = useLocation();
@@ -93,11 +93,7 @@ const Products = () => {
       <nav className="navbar navbar-expand-lg navbarColor">
         <div className="container-fluid">
           <div style={{ display: "flex" }}>
-            <img
-              src="https://png.pngtree.com/png-vector/20190329/ourlarge/pngtree-vector-shopping-bag-icon-png-image_889429.jpg"
-              height={40}
-              width={40}
-            />
+            <LuShoppingBag className="logo" />
             <h4 className="shopcartTitle" onClick={onNaviagteToLogin}>
               Shop cart
             </h4>
