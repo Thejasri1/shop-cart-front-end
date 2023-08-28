@@ -10,6 +10,10 @@ import AddCart from "./cart";
 import { LuShoppingBag } from "react-icons/lu";
 
 const Products = () => {
+  const url =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:8080"
+      : "https://shop-cart-6zmr.onrender.com";
   const location = useLocation();
   const navigate = useNavigate();
   const [searchItems, setSearchItems] = useState("");
@@ -21,7 +25,7 @@ const Products = () => {
       if (token === null || token === "") {
         navigate("/", { state: null });
       } else {
-        const getProducts = await axios.get("http://localhost:8080/products", {
+        const getProducts = await axios.get(url + "/products", {
           headers: { "X-Token": token },
         });
         setProductsList(getProducts.data);

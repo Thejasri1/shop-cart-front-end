@@ -37,7 +37,7 @@ const Register = () => {
   };
   return (
     <div>
-      {message == "Registered Successfully" ? (
+      {message === "Registered Successfully" ? (
         <p style={{ color: "green" }}>{message}</p>
       ) : (
         <p style={{ color: "red" }}>{message}</p>
@@ -50,7 +50,7 @@ const Register = () => {
           name="username"
           onChange={onChangeFormData}
           className="input"
-        />{" "}
+        />
         <br />
         <label>Enter Email :</label> <br />
         <input
@@ -58,7 +58,7 @@ const Register = () => {
           name="email"
           onChange={onChangeFormData}
           className="input"
-        />{" "}
+        />
         <br />
         <label>Enter Password :</label> <br />
         <input
