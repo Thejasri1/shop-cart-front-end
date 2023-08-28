@@ -4,7 +4,7 @@ import axios from "axios";
 
 const url =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:8080"
+    ? "http://0.0.0.0:8080"
     : "https://shop-cart-6zmr.onrender.com";
 
 const getUsers = async () => {
