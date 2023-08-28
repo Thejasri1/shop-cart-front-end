@@ -4,7 +4,7 @@ import axios from "axios";
 
 const url =
   process.env.NODE_ENV === "development"
-    ? "http://0.0.0.0:8080"
+    ? "http://127.0.0.1:8080"
     : "https://shop-cart-6zmr.onrender.com";
 
 const getCartRoute = async () => {

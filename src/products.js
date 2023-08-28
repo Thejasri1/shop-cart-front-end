@@ -12,7 +12,7 @@ import { LuShoppingBag } from "react-icons/lu";
 const Products = () => {
   const url =
     process.env.NODE_ENV === "development"
-      ? "http://0.0.0.0:8080"
+      ? "http://localhost:8080"
       : "https://shop-cart-6zmr.onrender.com";
   const location = useLocation();
   const navigate = useNavigate();
