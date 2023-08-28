@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { deleteCartRoute, getCartRoute } from "./API/cartApi";
 import { useNavigate, useLocation } from "react-router-dom";
 import Star from "./Star";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { FaShopify } from "react-icons/fa";
 import "./cart.css";
 
 const AddCart = () => {
@@ -73,9 +75,13 @@ const AddCart = () => {
                 onClick={() => onRemoveCartProduct(p._id)}
                 className="cartBtn"
               >
+                <AiOutlineShoppingCart
+                  style={{ color: "white", marginRight: "5px" }}
+                />
                 Remove from cart
               </button>
               <button className="btns" onClick={() => onDisplayOrderPage(p)}>
+                <FaShopify style={{ color: "white", marginRight: "5px" }} />
                 Place your order now
               </button>
             </div>

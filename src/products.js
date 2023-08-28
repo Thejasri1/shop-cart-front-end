@@ -2,18 +2,26 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { postCartRoute } from "./API/cartApi";
+import { getCartRoute, postCartRoute } from "./API/cartApi";
 import "./App.css";
 import { BiSearch } from "react-icons/bi";
 import Star from "./Star";
 import AddCart from "./cart";
+import { FaShopify } from "react-icons/fa";
+import {
+  AiOutlineLogout,
+  AiOutlineShoppingCart,
+  AiOutlineHome,
+} from "react-icons/ai";
 import { LuShoppingBag } from "react-icons/lu";
+import { SiShopify } from "react-icons/si";
 
 const Products = () => {
   const url =
     process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
       : "https://shop-cart-6zmr.onrender.com";
+  const [cartCount, setCartCount] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const [searchItems, setSearchItems] = useState("");
@@ -52,6 +60,8 @@ const Products = () => {
         setViewMode("cart");
       } else if (type === "home") {
         setViewMode("home");
+      } else if (type === "soldProd") {
+        navigate("/history", { state: token });
       }
     } catch (e) {
       console.log(e);
@@ -92,6 +102,19 @@ const Products = () => {
       console.log(e);
     }
   };
+  const getCartItems = async () => {
+    try {
+      const res = await getCartRoute();
+      setCartCount(res?.data.length);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getCartItems();
+  }, [cartCount]);
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbarColor">
@@ -131,7 +154,7 @@ const Products = () => {
                   onClick={() => onDisplayCart("home")}
                   className="navOptions"
                 >
-                  Home
+                  <AiOutlineHome className="itemIcon" />
                 </button>
               </div>
               <div className="navbar-nav">
@@ -139,8 +162,31 @@ const Products = () => {
                   onClick={() => onDisplayCart("cart")}
                   className="navOptions"
                 >
-                  View cart
+                  <AiOutlineShoppingCart className="itemIcon" />
+                  <sup
+                    style={{
+                      color: "red",
+                      fontFamily: "serif",
+                      fontSize: "15px",
+                    }}
+                  >
+                    {cartCount}
+                  </sup>
                 </button>
+              </div>
+              <div className="navbar-nav">
+                <button
+                  onClick={() => onDisplayCart("soldProd")}
+                  className="navOptions"
+                >
+                  <SiShopify className="itemIcon" />
+                </button>
+                <p
+                  className="navOptions"
+                  onClick={() => navigate("/", { state: location?.state[0] })}
+                >
+                  <AiOutlineLogout className="itemIcon" />
+                </p>
               </div>
             </div>
           </div>
@@ -262,6 +308,9 @@ const Products = () => {
                           onClick={() => onDisplayAddCart(product)}
                           className="btns"
                         >
+                          <AiOutlineShoppingCart
+                            style={{ color: "white", marginRight: "5px" }}
+                          />
                           Add to cart
                         </button>
                         <button
@@ -269,7 +318,7 @@ const Products = () => {
                           style={{ backgroundColor: "green", color: "white" }}
                           onClick={() => onDispalyOrderForm(product)}
                         >
-                          Order Now
+                          <FaShopify /> Order Now
                         </button>
                       </div>
                     </div>

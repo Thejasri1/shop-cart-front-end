@@ -7,9 +7,27 @@
 .emailContainer {
   height: 100vh;
   width: 100vw;
-  background-color: goldenrod;
+  background-color: #c0c0c0;
+  overflow: scroll;
 }
-
+.mailContainerforEmail {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  background-color: floralwhite;
+}
+li {
+  list-style-type: none;
+}
+.addressContainer {
+  background-color: floralwhite;
+  border-radius: 10px;
+  padding-left: 30px;
+  padding-top: 30px;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-bottom: 50px;
+}
 .emailPage {
   display: flex;
   flex-direction: row;
@@ -22,7 +40,7 @@ input {
   padding: 5px;
   border-radius: 5px;
   color: black;
-  border: none;
+  border: 1px solid goldenrod;
 }
 textarea {
   width: 25vw;
@@ -74,4 +92,10 @@ p {
 .navOptions:hover {
   border: 1px white solid;
   padding: 10px;
+}
+.addressText {
+  padding-top: 20px;
+  color: maroon;
+  font-family:serif;
+  font-weight: 600;
 }

@@ -1,42 +1,68 @@
 /** @format */
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import "./email.css";
 import "./App.css";
+import { AiOutlineHome } from "react-icons/ai";
 import { LuShoppingBag } from "react-icons/lu";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+  deleteAddress,
+  getAddress,
+  postAddress,
+  postSoldProd,
+  updateAddress,
+} from "./API/addressRoutes";
+import Star from "./Star";
+import { SiShopify } from "react-icons/si";
 
 const Email = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    contact: "",
+    state: "",
+    city: "",
+    address: "",
+    landmark: "",
+    pincode: "",
+  });
+  const [action, setAction] = useState("");
+  const [AddressList, setAddressList] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const form = useRef();
   const [orderText, setOrderText] = useState("Order Now");
   const sendEmail = (e) => {
     e.preventDefault();
-    emailjs
-      .sendForm(
-        "service_qrf1vch",
-        "template_yp44day",
-        form.current,
-        "vdvuTh_pQbNuk-bA8"
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-          let res =
-            result.text.toLocaleLowerCase() === "ok"
-              ? "Order placed"
-              : "Order Now";
-          setOrderText(res);
-        },
-        (error) => {
-          console.log(error.text);
-        }
-      );
+    if (action === "") {
+      emailjs
+        .sendForm(
+          "service_qrf1vch",
+          "template_jf8tvw2",
+          form.current,
+          "vdvuTh_pQbNuk-bA8"
+        )
+        .then(
+          (result) => {
+            let res =
+              result.text.toLocaleLowerCase() === "ok"
+                ? "Order placed"
+                : "Order Now";
+            setOrderText(res);
+          },
+          (error) => {
+            console.log(error.text);
+          }
+        );
+    } else {
+      return;
+    }
   };
   const productDetails = `Your product :  ${location.state[1].productname}\n  product : ${location.state[1].producttype}\n  price : ${location.state[1].productprice}\n`;
-  const orderMsg = "Your product will be reached in 5 days";
+
   const onDisplayHome = (type) => {
     try {
       if (type === "home") {
@@ -48,9 +74,131 @@ const Email = () => {
       console.log(e);
     }
   };
+
   const onNavigateToAuth = () => {
     try {
       navigate("/", { state: null });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onChangeAddressDetails = (e) => {
+    try {
+      let name = e.target.name;
+      let value = e.target.value;
+      setFormData((ps) => ({ ...ps, [name]: value }));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getAllAddressList = async () => {
+    try {
+      const res = await getAddress();
+      setAddressList(res?.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getAllAddressList();
+  }, []);
+
+  const onChangeAddress = (x) => {
+    try {
+      setSelectedAddress(x);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  let product = location?.state[1];
+  const onDeleteAddress = async (id) => {
+    try {
+      const res = await deleteAddress(id);
+      if (res?.data?.message === "Adress removed") {
+        getAllAddressList();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onDisplayEmailjsForm = (type) => {
+    if (type === "existed") {
+      document.getElementById("username").value = selectedAddress?.username;
+      document.getElementById("email").value = selectedAddress?.email;
+      document.getElementById("contact").value = selectedAddress?.contact;
+      document.getElementById("state").value = selectedAddress?.state;
+      document.getElementById("city").value = selectedAddress?.city;
+      document.getElementById("address").value = selectedAddress?.address;
+      document.getElementById("landmark").value = selectedAddress?.landmark;
+      document.getElementById("pincode").value = selectedAddress?.pincode;
+      document.getElementById("product").value = productDetails;
+      setFormData({
+        username: selectedAddress?.username,
+        email: selectedAddress?.email,
+        contact: selectedAddress?.contact,
+        state: selectedAddress?.state,
+        city: selectedAddress?.city,
+        address: selectedAddress?.address,
+        landmark: selectedAddress?.landmark,
+        pincode: selectedAddress?.pincode,
+      });
+    } else if (type === "update") {
+      setAction("update");
+      document.getElementById("username").value = selectedAddress?.username;
+      document.getElementById("email").value = selectedAddress?.email;
+      document.getElementById("contact").value = selectedAddress?.contact;
+      document.getElementById("state").value = selectedAddress?.state;
+      document.getElementById("city").value = selectedAddress?.city;
+      document.getElementById("address").value = selectedAddress?.address;
+      document.getElementById("landmark").value = selectedAddress?.landmark;
+      document.getElementById("pincode").value = selectedAddress?.pincode;
+      document.getElementById("product").value = productDetails;
+      setFormData({
+        username: selectedAddress?.username,
+        email: selectedAddress?.email,
+        contact: selectedAddress?.contact,
+        state: selectedAddress?.state,
+        city: selectedAddress?.city,
+        address: selectedAddress?.address,
+        landmark: selectedAddress?.landmark,
+        pincode: selectedAddress?.pincode,
+      });
+    } else {
+      document.getElementById("username").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("contact").value = "";
+      document.getElementById("state").value = "";
+      document.getElementById("city").value = "";
+      document.getElementById("address").value = "";
+      document.getElementById("landmark").value = "";
+      document.getElementById("pincode").value = "";
+      document.getElementById("product").value = productDetails;
+    }
+  };
+
+  //post or update address
+  const postOrderToUser = async (type) => {
+    try {
+      if (type === "post") {
+        console.log("id :", formData);
+        const res = await postAddress(formData);
+        console.log(res?.data?.message);
+        if (res?.data?.message === "Address added") {
+          getAllAddressList();
+        }
+        await postSoldProd(location?.state[1]);
+      } else {
+        console.log("id :", formData);
+        const res = await updateAddress(selectedAddress?._id, formData);
+        console.log(res?.data?.message);
+        if (res?.data?.message === "address details updated") {
+          getAllAddressList();
+        }
+      }
     } catch (e) {
       console.log(e);
     }
@@ -74,58 +222,265 @@ const Email = () => {
           </div>
           <div className="flexContainer">
             <p className="navOptions" onClick={() => onDisplayHome("home")}>
-              Home
+              <AiOutlineHome className="itemIcon" />
             </p>
-            <p className="navOptions" onClick={() => onDisplayHome("viewcart")}>
-              View Cart
-            </p>
+            <button
+              onClick={() =>
+                navigate("/history", { state: location?.state[0] })
+              }
+              className="navOptions"
+            >
+              <SiShopify className="itemIcon" />
+            </button>
           </div>
         </div>
       </nav>
-      <div className="emailPage">
-        <form ref={form} onSubmit={sendEmail}>
-          <label>Enter Name :</label>
-          <br />
-          <input
-            type="text"
-            name="user_name"
-            placeholder="Enter your name"
-            className="mb-2"
-          />
-          <br />
-          <label>Enter Email :</label> <br />
-          <input
-            type="email"
-            name="user_email"
-            placeholder="example@gmail.com"
-            className="mb-2"
-          />
-          <br />
-          <label>Enter Address :</label> <br />
-          <textarea
-            name="message"
-            placeholder="Enter address"
-            className="mb-2"
-          />
-          <br />
-          <textarea
-            name="address"
-            defaultValue={productDetails}
-            style={{ display: "none" }}
-          />
-          <textarea
-            name="orderMessage"
-            defaultValue={orderMsg}
-            style={{ display: "none" }}
-          />
-          <br />
-          <button
-            type="submit"
-            className={orderText == "Order Now" ? "orderBtn" : "orderPlaced"}
-          >
-            {orderText}
-          </button>
-        </form>
+      <div>
+        <div>
+          <div className="mailContainerforEmail">
+            <img src={product?.productimage} height={200} width={200} />
+            <div>
+              <p>{product?.productname}</p>
+              <p>{product?.productdescription}</p>
+              <h5>
+                <sub>
+                  <i>price :{product?.productprice}$</i>
+                </sub>
+                <sup>
+                  <i>{product?.productdiscount}</i>
+                </sup>
+              </h5>
+              <Star star={product?.productrating} />
+              <p style={{ paddingTop: "10px" }}>
+                <spam style={{ color: "blue" }}>Sold :</spam>
+                <i>{product?.productsoldcount}</i>
+              </p>
+            </div>
+          </div>
+          <div>
+            <h4 className="addressText text-center">
+              Select a delivery address
+            </h4>
+            <div className="addressContainer">
+              {AddressList?.map((x) => {
+                return (
+                  <div className="form-check" key={x._id}>
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="address"
+                      id="address1"
+                      onClick={() => {
+                        onChangeAddress(x);
+                      }}
+                    />
+                    <label className="form-check-label" htmlFor="address1">
+                      <ul>
+                        <li>username :{x?.username}</li>
+                        <li>email :{x?.email}</li>
+                        <li>contact :{x?.contact}</li>
+                        <li>state :{x?.state}</li>
+                        <li>city :{x?.city}</li>
+                        <li>address :{x?.address}</li>
+                        <li>landmark :{x?.landmark}</li>
+                        <li>pincode :{x?.pincode}</li>
+                      </ul>
+                      <hr style={{ width: "60rem" }} />
+                    </label>
+                  </div>
+                );
+              })}
+              <div>
+                <button
+                  type="button"
+                  className="btn btn-warning mx-5 mb-4"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  disabled={selectedAddress === "" ? true : false}
+                  onClick={() => onDisplayEmailjsForm("existed")}
+                  style={{ width: "200px" }}
+                >
+                  Delivery to this address
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary mb-4"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  onClick={() => onDisplayEmailjsForm("new")}
+                  style={{ width: "200px" }}
+                >
+                  Add New Address
+                </button>
+                <br />
+                <button
+                  type="button"
+                  className="btn btn-secondary mb-4 mx-5"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  onClick={() => onDisplayEmailjsForm("update")}
+                  style={{ width: "200px" }}
+                  disabled={selectedAddress === "" ? true : false}
+                >
+                  Edit address
+                </button>
+                <button
+                  onClick={() => onDeleteAddress(selectedAddress?._id)}
+                  className="btn btn-danger mb-4"
+                  disabled={selectedAddress === "" ? true : false}
+                  style={{ width: "200px" }}
+                >
+                  Delete address
+                </button>
+                <br />
+                <div
+                  className="modal fade"
+                  id="exampleModal"
+                  tabIndex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          Please Fill adress
+                        </h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        <div className="emailPage">
+                          <form ref={form} onSubmit={sendEmail}>
+                            <label>Enter Username :</label>
+                            <br />
+                            <input
+                              type="text"
+                              name="username"
+                              id="username"
+                              placeholder="Enter your name"
+                              className="mb-2"
+                              onChange={onChangeAddressDetails}
+                            />
+                            <br />
+                            <label>Enter Email :</label> <br />
+                            <input
+                              type="email"
+                              name="email"
+                              id="email"
+                              placeholder="example@gmail.com"
+                              className="mb-2"
+                              onChange={onChangeAddressDetails}
+                            />
+                            <br />
+                            <label>Enter Contact :</label> <br />
+                            <input
+                              type="text"
+                              name="contact"
+                              id="contact"
+                              placeholder="+91"
+                              className="mb-2"
+                              onChange={onChangeAddressDetails}
+                            />
+                            <br />
+                            <label>Enter State :</label> <br />
+                            <input
+                              type="text"
+                              name="state"
+                              id="state"
+                              placeholder="e.g Telangana"
+                              className="mb-2"
+                              onChange={onChangeAddressDetails}
+                            />
+                            <br />
+                            <label>Enter City :</label> <br />
+                            <input
+                              type="text"
+                              name="city"
+                              id="city"
+                              placeholder="e.g Hyderabad"
+                              className="mb-2"
+                              onChange={onChangeAddressDetails}
+                            />
+                            <br />
+                            <label>
+                              Enter House , building, Appartment, Colony:
+                            </label>
+                            <br />
+                            <input
+                              type="text"
+                              name="address"
+                              id="address"
+                              placeholder="e.g house no"
+                              className="mb-2"
+                              onChange={onChangeAddressDetails}
+                            />
+                            <br />
+                            <label>Enter Landmark :</label> <br />
+                            <input
+                              type="text"
+                              name="landmark"
+                              id="landmark"
+                              placeholder="Enter landmark"
+                              className="mb-2"
+                              onChange={onChangeAddressDetails}
+                            />
+                            <br />
+                            <label>Enter Pincode/zipcode :</label> <br />
+                            <input
+                              type="text"
+                              name="pincode"
+                              id="pincode"
+                              placeholder="e.g 501511"
+                              className="mb-2"
+                              onChange={onChangeAddressDetails}
+                            />
+                            <input
+                              type="text"
+                              className="mb-2"
+                              name="product"
+                              id="product"
+                              defaultValue={productDetails}
+                              hidden={true}
+                            />
+                            <br />
+                            {action === "update" ? (
+                              <button
+                                type="submit"
+                                className={
+                                  action === "" ? "orderBtn" : "orderPlaced"
+                                }
+                                onClick={() => postOrderToUser("update")}
+                              >
+                                Update
+                              </button>
+                            ) : (
+                              <button
+                                type="submit"
+                                className={
+                                  orderText === "Order Now"
+                                    ? "orderBtn"
+                                    : "orderPlaced"
+                                }
+                                onClick={() => postOrderToUser("post")}
+                              >
+                                {orderText}
+                              </button>
+                            )}
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -124,7 +124,7 @@ button {
   font-family: serif;
 }
 .authBtns {
-  background-color:maroon;
+  background-color: maroon;
   color: white;
   font-weight: 20px;
   width: 200px;
@@ -137,10 +137,16 @@ button {
   font-family: cursive;
   font-size: medium;
 }
-.logo{
+.logo {
   height: 30px;
   width: 30px;
   color: goldenrod;
   margin-left: 20px;
+  margin-right: 10px;
+}
+.itemIcon {
+  height: 30px;
+  width: 30px;
+  color: white;
   margin-right: 10px;
 }
