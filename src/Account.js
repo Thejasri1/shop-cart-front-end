@@ -35,7 +35,7 @@ const Account = () => {
             <Login />
             <b
               onClick={() => displayAccType("register")}
-              style={{ color: "blue", paddingLeft: "50px" }}
+              style={{ color: "blue", paddingLeft: "100px" }}
             >
               <i>Create account</i>
             </b>

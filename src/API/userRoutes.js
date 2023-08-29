@@ -8,27 +8,19 @@ const url =
     : "https://shop-cart-6zmr.onrender.com";
 
 const getUsers = async () => {
-  try {
-    const res = await axios.get(url + `/users`);
-    return res;
-  } catch (e) {
-    console.log(e);
-  }
+  const res = await axios.get(url + `/users`);
+  return res;
 };
 const registerRoute = async (formData) => {
-  try {
-    const res = await axios.post(url + `/register`, formData);
-    return res;
-  } catch (e) {
-    console.log(e);
-  }
+  const res = await axios.post(url + `/register`, formData);
+  return res;
 };
 const loginRoute = async (formData) => {
-  try {
-    const res = await axios.post(url + `/login`, formData);
-    return res;
-  } catch (e) {
-    console.log(e);
-  }
+  const res = await axios.post(url + `/login`, formData);
+  return res;
 };
-export { getUsers, registerRoute, loginRoute };
+const updatePasswordRoute = async (id, formData) => {
+  const res = await axios.patch(url + `/register/${id}`, formData);
+  return res;
+};
+export { getUsers, registerRoute, loginRoute, updatePasswordRoute };

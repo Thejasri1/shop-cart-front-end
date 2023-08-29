@@ -25,10 +25,11 @@ const Login = () => {
       console.log(e);
     }
   };
+  let tokenObj = null;
   const onSubmitFormData = async () => {
     try {
       const res = await loginRoute(formData);
-      const tokenObj = res?.data?.token;
+      tokenObj = res?.data?.token;
       if (tokenObj) {
         navigate("/products", { state: tokenObj });
       } else {
@@ -86,6 +87,11 @@ const Login = () => {
         <b style={{ color: "blue" }}>
           <i onClick={() => onDisplayPasswordContainer("forgotPassword")}>
             Forgot password
+          </i>
+        </b>
+        <b style={{ color: "blue", paddingLeft: "80px" }}>
+          <i onClick={() => navigate("/setting", { state: tokenObj })}>
+            Change Password
           </i>
         </b>
         <br />

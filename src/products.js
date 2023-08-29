@@ -12,6 +12,7 @@ import {
   AiOutlineLogout,
   AiOutlineShoppingCart,
   AiOutlineHome,
+  AiOutlineUserAdd,
 } from "react-icons/ai";
 import { LuShoppingBag } from "react-icons/lu";
 import { SiShopify } from "react-icons/si";
@@ -24,6 +25,7 @@ const Products = () => {
   const [cartCount, setCartCount] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+  const [countQuantity, setCountQuantity] = useState(1);
   const [searchItems, setSearchItems] = useState("");
   const [viewMode, setViewMode] = useState("home");
   const [token, setToken] = useState(location?.state);
@@ -77,9 +79,7 @@ const Products = () => {
   const onDoSearch = async () => {
     try {
       let product = searchItems.toLocaleLowerCase();
-      const res = await axios.get(
-        `http://localhost:8080/searchbyproduct/${product}`
-      );
+      const res = await axios.get(url + `/searchbyproduct/${product}`);
       setProductsList(res?.data);
       if (res?.data.length == "") {
         getAllProducts();
@@ -90,7 +90,7 @@ const Products = () => {
   };
   const onDispalyOrderForm = (product) => {
     try {
-      navigate("/order", { state: [token, product] });
+      navigate("/order", { state: [token, product, countQuantity] });
     } catch (e) {
       console.log(e);
     }
@@ -114,6 +114,15 @@ const Products = () => {
   useEffect(() => {
     getCartItems();
   }, [cartCount]);
+  const [productId, setProductId] = useState("");
+  const onIncreaseQuantity = (selectedId) => {
+    setProductId(selectedId);
+    setCountQuantity(() => countQuantity + 1);
+  };
+  const onDecreaseQuantity = (selectedId) => {
+    setProductId(selectedId);
+    setCountQuantity(() => countQuantity - 1);
+  };
 
   return (
     <div>
@@ -149,6 +158,14 @@ const Products = () => {
               <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div className="navbar-nav">
+                <button
+                  onClick={() => navigate("/setting", { state: token })}
+                  className="navOptions"
+                >
+                  <AiOutlineUserAdd className="itemIcon" />
+                </button>
+              </div>
               <div className="navbar-nav">
                 <button
                   onClick={() => onDisplayCart("home")}
@@ -220,14 +237,14 @@ const Products = () => {
           ></button>
         </div>
         <div className="carousel-inner">
-          <div className="carousel-item active">
+          <div className="carousel-item ">
             <img
               src="https://m.media-amazon.com/images/I/71QRxZvKnGL._SX3000_.jpg"
               className="d-block w-100 carousalImg"
               alt="..."
             />
           </div>
-          <div className="carousel-item">
+          <div className="carousel-item active">
             <img
               src="https://m.media-amazon.com/images/I/61zAjw4bqPL._SX3000_.jpg"
               className="d-block w-100 carousalImg"
@@ -270,6 +287,8 @@ const Products = () => {
       {viewMode === "home" ? (
         <div className="container-fluid cardsSection">
           {productsList?.map((product) => {
+            let pId = product?._id;
+            console.log("pId", pId === productId);
             return (
               <div className="row">
                 {
@@ -303,24 +322,47 @@ const Products = () => {
                         <spam style={{ color: "blue" }}>Sold :</spam>
                         <i>{product?.productsoldcount}</i>
                       </p>
-                      <div style={{ display: "flex" }}>
-                        <button
-                          onClick={() => onDisplayAddCart(product)}
-                          className="btns"
-                        >
-                          <AiOutlineShoppingCart
-                            style={{ color: "white", marginRight: "5px" }}
-                          />
-                          Add to cart
-                        </button>
-                        <button
-                          className="btns"
-                          style={{ backgroundColor: "green", color: "white" }}
-                          onClick={() => onDispalyOrderForm(product)}
-                        >
-                          <FaShopify /> Order Now
-                        </button>
-                      </div>
+                    </div>
+                    <div className="d-flex mb-5">
+                      <button
+                        onClick={() => onDecreaseQuantity(product._id)}
+                        className="qtybtn qutyBtnLeft"
+                      >
+                        -
+                      </button>
+                      <button
+                        type="text"
+                        style={{
+                          border: "1px solid black",
+                          width: "50px",
+                        }}
+                      >
+                        {pId === productId ? countQuantity : 1}
+                      </button>
+                      <button
+                        onClick={() => onIncreaseQuantity(product?._id)}
+                        className="qtybtn qutyBtnRight"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div style={{ display: "flex" }}>
+                      <button
+                        onClick={() => onDisplayAddCart(product)}
+                        className="btns"
+                      >
+                        <AiOutlineShoppingCart
+                          style={{ color: "white", marginRight: "5px" }}
+                        />
+                        Add to cart
+                      </button>
+                      <button
+                        className="btns"
+                        style={{ backgroundColor: "green", color: "white" }}
+                        onClick={() => onDispalyOrderForm(product)}
+                      >
+                        <FaShopify /> Order Now
+                      </button>
                     </div>
                   </div>
                 }

@@ -1,16 +1,16 @@
 /** @format */
-.containerMain{
-    height: 100vh;
-    width: 100vw;
+.containerMain {
+  height: 100vh;
+  width: 100vw;
 }
-p{
-    font-family: serif;
+p {
+  font-family: serif;
 }
 .cartContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-background-color: wheat;
+  background-color: wheat;
   line-height: 5px;
   margin-left: 200px;
   margin-right: 200px;
@@ -18,9 +18,9 @@ background-color: wheat;
   padding: 10px;
   border-radius: 10px;
 }
-.cartTitle{
-    color: maroon;
-    font-family: serif;
-    text-align: center;
-    padding: 20px;
+.cartTitle {
+  color: maroon;
+  font-family: serif;
+  text-align: center;
+  padding: 20px;
 }

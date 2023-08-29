@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 import { getSoldProducts } from "./API/addressRoutes";
 import { LuShoppingBag } from "react-icons/lu";
-import { AiOutlineLogout, AiOutlineHome } from "react-icons/ai";
+import {
+  AiOutlineLogout,
+  AiOutlineHome,
+  AiOutlineUserAdd,
+} from "react-icons/ai";
 import { useLocation, useNavigate } from "react-router-dom";
 import Star from "./Star";
 
@@ -23,8 +27,9 @@ const HistoryProducts = () => {
   useEffect(() => {
     getAllProducts();
   }, []);
+
   return (
-    <div>
+    <div className="historyContainer">
       <nav className="navbarColor">
         <div
           style={{
@@ -43,6 +48,12 @@ const HistoryProducts = () => {
             </h4>
           </div>
           <div className="flexContainer">
+            <button
+              onClick={() => navigate("/setting", { state: location?.state })}
+              className="navOptions"
+            >
+              <AiOutlineUserAdd className="itemIcon" />
+            </button>
             <p
               className="navOptions"
               onClick={() => navigate("/products", { state: location?.state })}
@@ -65,8 +76,8 @@ const HistoryProducts = () => {
             style={{
               display: "flex",
               margin: "20px",
-              backgroundColor: "#c0c0c0",
               borderRadius: "5px",
+              backgroundColor: "white",
               padding: "20px",
             }}
           >
@@ -80,6 +91,7 @@ const HistoryProducts = () => {
             <div>
               <h4>{p?.productname}</h4>
               <p>{p?.productcolor}</p>
+              <i>Quantity :{p?.quantity}</i>
               <h5>
                 <sub>
                   <i>price :{p?.productprice}$</i>

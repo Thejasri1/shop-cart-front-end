@@ -7,7 +7,7 @@
 .emailContainer {
   height: 100vh;
   width: 100vw;
-  background-color: #c0c0c0;
+  background-color: goldenrod;
   overflow: scroll;
 }
 .mailContainerforEmail {
@@ -90,8 +90,11 @@ p {
   font-family: serif;
 }
 .navOptions:hover {
-  border: 1px white solid;
+  background-color: goldenrod;
+  height: 40px;
+  width: 40px;
   padding: 10px;
+  border-radius: 40px;
 }
 .addressText {
   padding-top: 20px;
@@ -99,3 +102,4 @@ p {
   font-family:serif;
   font-weight: 600;
 }
+

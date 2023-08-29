@@ -18,6 +18,7 @@ import Star from "./Star";
 import { SiShopify } from "react-icons/si";
 
 const Email = () => {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -27,41 +28,36 @@ const Email = () => {
     address: "",
     landmark: "",
     pincode: "",
+    quantity: location?.state[2],
   });
-  const [action, setAction] = useState("");
   const [AddressList, setAddressList] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState("");
-  const location = useLocation();
   const navigate = useNavigate();
   const form = useRef();
   const [orderText, setOrderText] = useState("Order Now");
   const sendEmail = (e) => {
     e.preventDefault();
-    if (action === "") {
-      emailjs
-        .sendForm(
-          "service_qrf1vch",
-          "template_jf8tvw2",
-          form.current,
-          "vdvuTh_pQbNuk-bA8"
-        )
-        .then(
-          (result) => {
-            let res =
-              result.text.toLocaleLowerCase() === "ok"
-                ? "Order placed"
-                : "Order Now";
-            setOrderText(res);
-          },
-          (error) => {
-            console.log(error.text);
-          }
-        );
-    } else {
-      return;
-    }
+    emailjs
+      .sendForm(
+        "service_qrf1vch",
+        "template_jf8tvw2",
+        form.current,
+        "vdvuTh_pQbNuk-bA8"
+      )
+      .then(
+        (result) => {
+          let res =
+            result.text.toLocaleLowerCase() === "ok"
+              ? "Order placed"
+              : "Order Now";
+          setOrderText(res);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
   };
-  const productDetails = `Your product :  ${location.state[1].productname}\n  product : ${location.state[1].producttype}\n  price : ${location.state[1].productprice}\n`;
+  const productDetails = `Your product :  ${location.state[1].productname}\n  product : ${location.state[1].producttype}\n  price : ${location.state[1].productprice}\n quantity :${location?.state[2]}`;
 
   const onDisplayHome = (type) => {
     try {
@@ -125,83 +121,104 @@ const Email = () => {
     }
   };
 
-  const onDisplayEmailjsForm = (type) => {
-    if (type === "existed") {
-      document.getElementById("username").value = selectedAddress?.username;
-      document.getElementById("email").value = selectedAddress?.email;
-      document.getElementById("contact").value = selectedAddress?.contact;
-      document.getElementById("state").value = selectedAddress?.state;
-      document.getElementById("city").value = selectedAddress?.city;
-      document.getElementById("address").value = selectedAddress?.address;
-      document.getElementById("landmark").value = selectedAddress?.landmark;
-      document.getElementById("pincode").value = selectedAddress?.pincode;
-      document.getElementById("product").value = productDetails;
-      setFormData({
-        username: selectedAddress?.username,
-        email: selectedAddress?.email,
-        contact: selectedAddress?.contact,
-        state: selectedAddress?.state,
-        city: selectedAddress?.city,
-        address: selectedAddress?.address,
-        landmark: selectedAddress?.landmark,
-        pincode: selectedAddress?.pincode,
-      });
-    } else if (type === "update") {
-      setAction("update");
-      document.getElementById("username").value = selectedAddress?.username;
-      document.getElementById("email").value = selectedAddress?.email;
-      document.getElementById("contact").value = selectedAddress?.contact;
-      document.getElementById("state").value = selectedAddress?.state;
-      document.getElementById("city").value = selectedAddress?.city;
-      document.getElementById("address").value = selectedAddress?.address;
-      document.getElementById("landmark").value = selectedAddress?.landmark;
-      document.getElementById("pincode").value = selectedAddress?.pincode;
-      document.getElementById("product").value = productDetails;
-      setFormData({
-        username: selectedAddress?.username,
-        email: selectedAddress?.email,
-        contact: selectedAddress?.contact,
-        state: selectedAddress?.state,
-        city: selectedAddress?.city,
-        address: selectedAddress?.address,
-        landmark: selectedAddress?.landmark,
-        pincode: selectedAddress?.pincode,
-      });
-    } else {
-      document.getElementById("username").value = "";
-      document.getElementById("email").value = "";
-      document.getElementById("contact").value = "";
-      document.getElementById("state").value = "";
-      document.getElementById("city").value = "";
-      document.getElementById("address").value = "";
-      document.getElementById("landmark").value = "";
-      document.getElementById("pincode").value = "";
-      document.getElementById("product").value = productDetails;
-    }
-  };
-
   //post or update address
   const postOrderToUser = async (type) => {
     try {
-      if (type === "post") {
-        console.log("id :", formData);
+      setOrderText("Order Now");
+      if (!deliveryForm && type === "post") {
         const res = await postAddress(formData);
-        console.log(res?.data?.message);
         if (res?.data?.message === "Address added") {
           getAllAddressList();
+          clearForm();
         }
-        await postSoldProd(location?.state[1]);
-      } else {
-        console.log("id :", formData);
+      } else if (deliveryForm) {
         const res = await updateAddress(selectedAddress?._id, formData);
-        console.log(res?.data?.message);
         if (res?.data?.message === "address details updated") {
           getAllAddressList();
         }
       }
+      let reqBody = location?.state[1];
+      reqBody.quantity = location?.state[2];
+      await postSoldProd(reqBody);
     } catch (e) {
       console.log(e);
     }
+  };
+  const [editFormData, setEditFormData] = useState({});
+  const onChangeEditFormData = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    setEditFormData((ps) => ({ ...ps, [name]: value }));
+  };
+  const onSetEditForm = () => {
+    try {
+      document.getElementById("username1").value = selectedAddress?.username;
+      document.getElementById("email1").value = selectedAddress?.email;
+      document.getElementById("contact1").value = selectedAddress?.contact;
+      document.getElementById("state1").value = selectedAddress?.state;
+      document.getElementById("city1").value = selectedAddress?.city;
+      document.getElementById("addressId").value = selectedAddress?.address;
+      document.getElementById("landmark1").value = selectedAddress?.landmark;
+      document.getElementById("pincode1").value = selectedAddress?.pincode;
+      setEditFormData({
+        username: selectedAddress?.username,
+        email: selectedAddress?.email,
+        contact: selectedAddress?.contact,
+        state: selectedAddress?.state,
+        city: selectedAddress?.city,
+        address: selectedAddress?.address,
+        landmark: selectedAddress?.landmark,
+        pincode: selectedAddress?.pincode,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const updateAddressFun = async () => {
+    try {
+      const res = await updateAddress(selectedAddress?._id, editFormData);
+      if (res?.data?.message === "address details updated") {
+        getAllAddressList();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const [deliveryForm, setDeliveryForm] = useState(false);
+  const onSetDeliveryAddressForm = () => {
+    try {
+      setDeliveryForm(true);
+      document.getElementById("username").value = selectedAddress?.username;
+      document.getElementById("email").value = selectedAddress?.email;
+      document.getElementById("contact").value = selectedAddress?.contact;
+      document.getElementById("state").value = selectedAddress?.state;
+      document.getElementById("city").value = selectedAddress?.city;
+      document.getElementById("address").value = selectedAddress?.address;
+      document.getElementById("landmark").value = selectedAddress?.landmark;
+      document.getElementById("pincode").value = selectedAddress?.pincode;
+      setFormData({
+        username: selectedAddress?.username,
+        email: selectedAddress?.email,
+        contact: selectedAddress?.contact,
+        state: selectedAddress?.state,
+        city: selectedAddress?.city,
+        address: selectedAddress?.address,
+        landmark: selectedAddress?.landmark,
+        pincode: selectedAddress?.pincode,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const clearForm = () => {
+    document.getElementById("username").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("contact").value = "";
+    document.getElementById("state").value = "";
+    document.getElementById("city").value = "";
+    document.getElementById("address").value = "";
+    document.getElementById("landmark").value = "";
+    document.getElementById("pincode").value = "";
   };
 
   return (
@@ -237,11 +254,17 @@ const Email = () => {
       </nav>
       <div>
         <div>
-          <div className="mailContainerforEmail">
-            <img src={product?.productimage} height={200} width={200} />
+          <div className="mailContainerforEmail" style={{ padding: "20px" }}>
+            <img
+              src={product?.productimage}
+              height={200}
+              width={200}
+              style={{ marginRight: "20px", borderRadius: "5px" }}
+            />
             <div>
               <p>{product?.productname}</p>
               <p>{product?.productdescription}</p>
+              <i>Quantity :{location?.state[2]}</i>
               <h5>
                 <sub>
                   <i>price :{product?.productprice}$</i>
@@ -297,8 +320,8 @@ const Email = () => {
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModal"
                   disabled={selectedAddress === "" ? true : false}
-                  onClick={() => onDisplayEmailjsForm("existed")}
                   style={{ width: "200px" }}
+                  onClick={onSetDeliveryAddressForm}
                 >
                   Delivery to this address
                 </button>
@@ -307,8 +330,8 @@ const Email = () => {
                   className="btn btn-secondary mb-4"
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModal"
-                  onClick={() => onDisplayEmailjsForm("new")}
                   style={{ width: "200px" }}
+                  onClick={() => setOrderText("Order Now")}
                 >
                   Add New Address
                 </button>
@@ -316,13 +339,13 @@ const Email = () => {
                 <button
                   type="button"
                   className="btn btn-secondary mb-4 mx-5"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                  onClick={() => onDisplayEmailjsForm("update")}
                   style={{ width: "200px" }}
                   disabled={selectedAddress === "" ? true : false}
+                  data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop"
+                  onClick={onSetEditForm}
                 >
-                  Edit address
+                  Edit Address
                 </button>
                 <button
                   onClick={() => onDeleteAddress(selectedAddress?._id)}
@@ -344,7 +367,7 @@ const Email = () => {
                     <div className="modal-content">
                       <div className="modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">
-                          Please Fill adress
+                          Please Fill address
                         </h5>
                         <button
                           type="button"
@@ -448,31 +471,147 @@ const Email = () => {
                               hidden={true}
                             />
                             <br />
-                            {action === "update" ? (
-                              <button
-                                type="submit"
-                                className={
-                                  action === "" ? "orderBtn" : "orderPlaced"
-                                }
-                                onClick={() => postOrderToUser("update")}
-                              >
-                                Update
-                              </button>
-                            ) : (
-                              <button
-                                type="submit"
-                                className={
-                                  orderText === "Order Now"
-                                    ? "orderBtn"
-                                    : "orderPlaced"
-                                }
-                                onClick={() => postOrderToUser("post")}
-                              >
-                                {orderText}
-                              </button>
-                            )}
+                            <button
+                              type="submit"
+                              className={
+                                orderText === "Order Now"
+                                  ? "orderBtn"
+                                  : "orderPlaced"
+                              }
+                              onClick={() => postOrderToUser("post")}
+                            >
+                              {orderText}
+                            </button>
                           </form>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div
+                  class="modal fade"
+                  id="staticBackdrop"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                  tabindex="-1"
+                  aria-labelledby="staticBackdropLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">
+                          Update Address
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <label>Enter Username :</label>
+                        <br />
+                        <input
+                          type="text"
+                          name="username"
+                          id="username1"
+                          placeholder="Enter your name"
+                          className="mb-2"
+                          onChange={onChangeEditFormData}
+                        />
+                        <br />
+                        <label>Enter Email :</label> <br />
+                        <input
+                          type="email"
+                          name="email"
+                          id="email1"
+                          placeholder="example@gmail.com"
+                          className="mb-2"
+                          onChange={onChangeEditFormData}
+                        />
+                        <br />
+                        <label>Enter Contact :</label> <br />
+                        <input
+                          type="text"
+                          name="contact"
+                          id="contact1"
+                          placeholder="+91"
+                          className="mb-2"
+                          onChange={onChangeEditFormData}
+                        />
+                        <br />
+                        <label>Enter State :</label> <br />
+                        <input
+                          type="text"
+                          name="state"
+                          id="state1"
+                          placeholder="e.g Telangana"
+                          className="mb-2"
+                          onChange={onChangeEditFormData}
+                        />
+                        <br />
+                        <label>Enter City :</label> <br />
+                        <input
+                          type="text"
+                          name="city"
+                          id="city1"
+                          placeholder="e.g Hyderabad"
+                          className="mb-2"
+                          onChange={onChangeEditFormData}
+                        />
+                        <br />
+                        <label>
+                          Enter House , building, Appartment, Colony:
+                        </label>
+                        <br />
+                        <input
+                          type="text"
+                          name="address"
+                          id="addressId"
+                          placeholder="e.g house no"
+                          className="mb-2"
+                          onChange={onChangeEditFormData}
+                        />
+                        <br />
+                        <label>Enter Landmark :</label> <br />
+                        <input
+                          type="text"
+                          name="landmark"
+                          id="landmark1"
+                          placeholder="Enter landmark"
+                          className="mb-2"
+                          onChange={onChangeEditFormData}
+                        />
+                        <br />
+                        <label>Enter Pincode/zipcode :</label> <br />
+                        <input
+                          type="text"
+                          name="pincode"
+                          id="pincode1"
+                          placeholder="e.g 501511"
+                          className="mb-2"
+                          onChange={onChangeEditFormData}
+                        />
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          onClick={updateAddressFun}
+                        >
+                          Update Address
+                        </button>
                       </div>
                     </div>
                   </div>

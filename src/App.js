@@ -8,6 +8,7 @@ import Products from "./products";
 import AddCart from "./cart";
 import Email from "./email";
 import HistoryProducts from "./historyProducts";
+import Settings from "./Settings";
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ function App() {
         <Route path="/cart" element={<AddCart />}></Route>
         <Route path="/order" element={<Email />}></Route>
         <Route path="/history" element={<HistoryProducts />}></Route>
+        <Route path="/setting" element={<Settings />}></Route>
       </Routes>
     </BrowserRouter>
   );
