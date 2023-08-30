@@ -30,6 +30,7 @@ const Products = () => {
   const [viewMode, setViewMode] = useState("home");
   const [token, setToken] = useState(location?.state);
   const [productsList, setProductsList] = useState([]);
+  const [productId, setProductId] = useState("");
   const getAllProducts = async () => {
     try {
       if (token === null || token === "") {
@@ -114,15 +115,6 @@ const Products = () => {
   useEffect(() => {
     getCartItems();
   }, [cartCount]);
-  const [productId, setProductId] = useState("");
-  const onIncreaseQuantity = (selectedId) => {
-    setProductId(selectedId);
-    setCountQuantity(() => countQuantity + 1);
-  };
-  const onDecreaseQuantity = (selectedId) => {
-    setProductId(selectedId);
-    setCountQuantity(() => countQuantity - 1);
-  };
 
   return (
     <div>
@@ -288,7 +280,6 @@ const Products = () => {
         <div className="container-fluid cardsSection">
           {productsList?.map((product) => {
             let pId = product?._id;
-            console.log("pId", pId === productId);
             return (
               <div className="row">
                 {
@@ -309,13 +300,25 @@ const Products = () => {
                       </p>
                       <Star star={product?.productrating} />
                       <h5>
-                        <sub>
-                          <i>price :{product?.productprice}$</i>
-                        </sub>
-                        <sup>
-                          <i>{product?.productdiscount}</i>
-                        </sup>
+                        <p>
+                          <sub>
+                            <i>
+                              Price :
+                              <del>
+                                {product?.productprice +
+                                  product?.productdiscount}
+                                ₹
+                              </del>
+                            </i>
+                          </sub>
+                          <sup>
+                            <i>{product?.productprice}₹</i>
+                          </sup>
+                        </p>
                       </h5>
+                      <p>
+                        <i>Discount : {product?.productdiscount}</i>
+                      </p>
                       <p>{product?.productcolor}</p>
                       <p>Product :{product?.producttype}</p>
                       <p style={{ paddingTop: "10px" }}>
@@ -324,27 +327,25 @@ const Products = () => {
                       </p>
                     </div>
                     <div className="d-flex mb-5">
-                      <button
-                        onClick={() => onDecreaseQuantity(product._id)}
-                        className="qtybtn qutyBtnLeft"
-                      >
-                        -
-                      </button>
-                      <button
-                        type="text"
-                        style={{
-                          border: "1px solid black",
-                          width: "50px",
-                        }}
-                      >
-                        {pId === productId ? countQuantity : 1}
-                      </button>
-                      <button
-                        onClick={() => onIncreaseQuantity(product?._id)}
-                        className="qtybtn qutyBtnRight"
-                      >
-                        +
-                      </button>
+                      <b>
+                        <i style={{ color: "maroon" }}>
+                          Quantity :
+                          <input
+                            type="number"
+                            id={product?._id}
+                            value={pId === productId ? countQuantity : 1}
+                            onChange={(e) => {
+                              setProductId(product?._id);
+                              setCountQuantity(e.target.value);
+                            }}
+                            style={{
+                              width: "100px",
+                              marginLeft: "10px",
+                              color: "maroon",
+                            }}
+                          />
+                        </i>
+                      </b>
                     </div>
                     <div style={{ display: "flex" }}>
                       <button

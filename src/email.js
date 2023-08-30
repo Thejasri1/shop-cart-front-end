@@ -267,10 +267,10 @@ const Email = () => {
               <i>Quantity :{location?.state[2]}</i>
               <h5>
                 <sub>
-                  <i>price :{product?.productprice}$</i>
+                  <i>price :{product?.productprice}₹</i>
                 </sub>
                 <sup>
-                  <i>{product?.productdiscount}</i>
+                  <i>{product?.productdiscount}₹</i>
                 </sup>
               </h5>
               <Star star={product?.productrating} />

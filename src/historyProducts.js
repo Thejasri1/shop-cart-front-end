@@ -93,13 +93,20 @@ const HistoryProducts = () => {
               <p>{p?.productcolor}</p>
               <i>Quantity :{p?.quantity}</i>
               <h5>
-                <sub>
-                  <i>price :{p?.productprice}$</i>
-                </sub>
-                <sup>
-                  <i>{p?.productdiscount}</i>
-                </sup>
+                <p>
+                  <sub>
+                    <i>
+                      Price :<del>{p?.productprice + p?.productdiscount}₹</del>
+                    </i>
+                  </sub>
+                  <sup>
+                    <i>{p?.productprice}₹</i>
+                  </sup>
+                </p>
               </h5>
+              <p>
+                <i>Discount : {p?.productdiscount}</i>
+              </p>
               <p>{p?.producttype}</p>
               <Star star={p?.productrating} />
               <p style={{ paddingTop: "10px" }}>
