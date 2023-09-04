@@ -1,3 +1,11 @@
+
+Deployed link of the shop cart app  :
+
+https://shop-cart-front-end-6wcx.vercel.app/
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
