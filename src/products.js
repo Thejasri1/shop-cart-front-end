@@ -21,7 +21,7 @@ const Products = () => {
   const url =
     process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
-      : "https://shop-cart-6zmr.onrender.com";
+      : "https://tejasree-project.onrender.com";
   const [cartCount, setCartCount] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
